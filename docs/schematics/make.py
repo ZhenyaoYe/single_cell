@@ -153,7 +153,7 @@ ax.set_xticks(range(3)); ax.set_xticklabels(TN[:3]); ax.set_ylim(0, 0.8); ax.set
 ax.set_title("s for one query cell", fontsize=9); [ax.spines[x].set_visible(False) for x in ["top", "right", "left"]]
 cal = sub(fig, P[0], (0.60, 0.30, 0.30, 0.45))
 CS = 0.3 + 0.25 * (np.repeat(np.arange(4), 3)[:, None] == np.arange(4)[None]) + rng.normal(0, 0.05, (12, 4))
-mat(cal, CS, cmap="viridis", title="calibration cells", xl="types")
+mat(cal, CS, cmap="viridis", title="reference cells", xl="types")
 lab_ax = sub(fig, P[0], (0.92, 0.30, 0.04, 0.45)); lab_ax.imshow(np.repeat(np.arange(4), 3)[:, None], cmap=ListedColormap(TC), aspect="auto"); lab_ax.set_axis_off()
 txt(fig, P[0], 0.12, 0.10, "scores differ by only a few hundredths;\nheld-out reference donors have true labels", fontsize=8, color=MUTED)
 # does
@@ -161,20 +161,20 @@ ax = sub(fig, P[1], (0.12, 0.40, 0.80, 0.38))
 logT = np.linspace(np.log(0.005), np.log(1.5), 200)
 nll = 0.55 * (logT - np.log(0.05)) ** 2 / 4 + 0.45 + 0.02 * np.exp(-(logT - np.log(0.05)) * 1.2)
 ax.plot(np.exp(logT), nll, color="#e08a2e", lw=2); ax.set_xscale("log")
-ax.axvline(0.05, ls="--", color=MUTED, lw=1); ax.text(0.055, nll.max() * 0.9, "fitted T", fontsize=8, color=MUTED)
-ax.set_xlabel("temperature T (log)", fontsize=8); ax.set_ylabel("NLL on\nreference", fontsize=8); ax.set_yticks([]); ax.tick_params(labelsize=7)
+ax.axvline(0.05, ls="--", color=MUTED, lw=1); ax.text(0.055, nll.max() * 0.9, "chosen T", fontsize=8, color=MUTED)
+ax.set_xlabel("scaling factor T (log)", fontsize=8); ax.set_ylabel("error on\nreference labels", fontsize=8); ax.set_yticks([]); ax.tick_params(labelsize=7)
 [ax.spines[x].set_visible(False) for x in ["top", "right"]]
 txt(fig, P[1], 0.08, 0.14, r"$p^0_{ik} = \mathrm{softmax}_k(s_{ik}/T)$", fontsize=10)
 txt(fig, P[1], 0.08, 0.05, "pick T that best predicts known reference labels", fontsize=8, color=MUTED)
 # output
-for j, (T, lbl) in enumerate([(1, "T = 1"), (0.05, "e.g. fitted T = 0.05"), (0.02, "T = 0.02")]):
+for j, (T, lbl) in enumerate([(1, "T = 1"), (0.05, "chosen T = 0.05"), (0.02, "T = 0.02")]):
     p = np.exp(s / T); p /= p.sum()
     ax = sub(fig, P[2], (0.07 + j * 0.31, 0.32, 0.25, 0.43))
     ax.bar(range(3), p, color=TC[:3], width=0.65, alpha=1 if j == 1 else 0.45)
     for i, v in enumerate(p): ax.text(i, v + 0.03, f"{v:.2f}", ha="center", fontsize=7)
     ax.set_ylim(0, 1.1); ax.set_yticks([]); ax.set_xticks(range(3)); ax.set_xticklabels(TN[:3], fontsize=8)
     ax.set_title(lbl, fontsize=8.5, fontweight="bold" if j == 1 else "normal"); [ax.spines[x].set_visible(False) for x in ["top", "right", "left"]]
-txt(fig, P[2], 0.07, 0.10, "T (one number) + p$^0$ (n × K); reference-only label = argmax,\nsame for any T", fontsize=8, color=MUTED)
+txt(fig, P[2], 0.07, 0.10, "p$^0$: one probability per cell and type (n × K)\nbest type is the same for any T", fontsize=8, color=MUTED)
 save(fig, "step3.png")
 
 # ---------------- Step 4 ----------------
