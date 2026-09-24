@@ -142,7 +142,7 @@ txt(fig, P[2], 0.08, 0.08, "brighter = more similar", fontsize=FS - 1, color=MUT
 save(fig, "step2.png")
 
 # ---------------- Step 3 ----------------
-fig, P = frame("Step 3  Temperature calibration")
+fig, P = frame(None)
 s = np.array([0.62, 0.58, 0.30])
 ax = sub(fig, P[0], (0.12, 0.30, 0.38, 0.45))
 ax.bar(range(3), s, color=TC[:3], width=0.65)
@@ -176,7 +176,7 @@ txt(fig, P[2], 0.07, 0.10, "T (one number) + p$^0$ (n × K); reference-only labe
 save(fig, "step3.png")
 
 # ---------------- Step 4 ----------------
-fig, P = frame("Step 4  ICONS: fixed clusters")
+fig, P = frame(None)
 n = 30; sizes = [11, 8, 7, 4]
 C, lab = blocky(n, sizes, strength=0.6, noise=0.1)
 lab = lab.copy(); lab[26:] = -1
@@ -219,7 +219,7 @@ txt(fig, P[2], 0.14, 0.06, "one cluster id per cell - never changes afterwards",
 save(fig, "step4.png")
 
 # ---------------- Step 5 ----------------
-fig, P = frame("Step 5  EM with fixed clusters")
+fig, P = frame(None)
 m = 8
 p0 = np.array([[0.69, 0.31, 0.0], [0.30, 0.70, 0], [0.25, 0.75, 0], [0.96, 0.04, 0], [0.20, 0.78, 0.02], [0.35, 0.63, 0.02], [0.15, 0.83, 0.02], [0.28, 0.70, 0.02]])
 def stacks(ax, M, title):
@@ -230,7 +230,7 @@ def stacks(ax, M, title):
     [s.set_visible(False) for s in ax.spines.values()]
 ax = sub(fig, P[0], (0.10, 0.25, 0.80, 0.50)); stacks(ax, p0, "p$^0$ for 8 cells of one ICONS cluster (cells 1-8)")
 ax.set_xticks(range(8)); ax.set_xticklabels([str(i+1) for i in range(8)], fontsize=7.5); ax.tick_params(length=0)
-txt(fig, P[0], 0.10, 0.10, "+ fixed cluster id per cell (Step 4)", fontsize=8, color=MUTED)
+txt(fig, P[0], 0.10, 0.10, "+ fixed cluster id per cell (Step 3)", fontsize=8, color=MUTED)
 for k in range(3): txt(fig, P[0], 0.10 + k * 0.14, 0.18, "■ " + TN[k], fontsize=8, color=TC[k])
 # does
 bx = sub(fig, P[1], (0.04, 0.08, 0.92, 0.80)); bx.set_axis_off(); bx.set_xlim(0, 1); bx.set_ylim(0, 1)
@@ -258,7 +258,7 @@ txt(fig, P[2], 0.10, 0.10, "q (n × K), EM label = argmax q,\ncluster compositio
 save(fig, "step5.png")
 
 # ---------------- Step 6 ----------------
-fig, P = frame("Step 6  Evaluation")
+fig, P = frame(None)
 nc = 16
 truth = np.array([0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 1, 0, 2])
 def noisy(t, flips):
