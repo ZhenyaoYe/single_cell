@@ -125,9 +125,10 @@ for k in range(4):
     bx.add_patch(Rectangle((0.47, y - 0.04), 0.17, 0.08, fc=TC[k], ec="none"))
     bx.text(0.555, y, "type " + TN[k], ha="center", va="center", fontsize=FS - 1, color="white", fontweight="bold")
     bx.text(0.67, y, "$s_{i%s}$" % TN[k] + f" = {rs[k]:.2f}", va="center", fontsize=FS - 1, fontweight="bold" if k == 1 else "normal")
-bx.text(0.02, 0.39, "1. score for type k = mean Pearson r to its cells:", fontsize=FS - 1, va="top")
-bx.text(0.06, 0.31, r"$s_{ik} = \frac{1}{n_k}\sum_{j \in k} r(x_i, x_j) = \frac{z_i^{\top}\bar{z}_k}{G-1}$", fontsize=FS + 1, va="top")
-bx.text(0.02, 0.14, "2. Pearson r between query cells\n    →  query correlation matrix", fontsize=FS - 1, va="top")
+bx.text(0.02, 0.40, "1. score for type k = mean Pearson r to its cells:", fontsize=FS - 1, va="top")
+bx.text(0.06, 0.335, r"$s_{ik} = \frac{1}{n_k}\sum_{j \in k} r(x_i, x_j) = \frac{z_i^{\top}\bar{z}_k}{G-1}$", fontsize=FS + 1, va="top")
+bx.text(0.06, 0.195, "G = number of HVGs (3000)", fontsize=FS - 1, va="top", color=MUTED)
+bx.text(0.02, 0.11, "2. Pearson r between query cells\n    →  query correlation matrix", fontsize=FS - 1, va="top")
 # output
 C, _ = blocky(10, [4, 3, 3]); perm = rng.permutation(10)
 ax = sub(fig, P[2], (0.08, 0.24, 0.44, 0.46)); mat(ax, C[np.ix_(perm, perm)], cmap="viridis", vmin=0, vmax=1)
