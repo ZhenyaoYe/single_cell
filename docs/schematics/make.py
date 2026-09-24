@@ -164,7 +164,7 @@ ax.plot(np.exp(logT), nll, color="#e08a2e", lw=2); ax.set_xscale("log")
 ax.axvline(0.05, ls="--", color=MUTED, lw=1); ax.text(0.055, nll.max() * 0.9, "chosen T", fontsize=8, color=MUTED)
 ax.set_xlabel("scaling factor T (log)", fontsize=8); ax.set_ylabel("error on\nreference labels", fontsize=8); ax.set_yticks([]); ax.tick_params(labelsize=7)
 [ax.spines[x].set_visible(False) for x in ["top", "right"]]
-txt(fig, P[1], 0.08, 0.14, r"$p^0_{ik} = \mathrm{softmax}_k(s_{ik}/T)$", fontsize=10)
+txt(fig, P[1], 0.08, 0.14, r"$q^0_{ik} = \mathrm{softmax}_k(s_{ik}/T)$", fontsize=10)
 txt(fig, P[1], 0.08, 0.05, "pick T that best predicts known reference labels", fontsize=8, color=MUTED)
 # output
 for j, (T, lbl) in enumerate([(1, "T = 1"), (0.05, "chosen T = 0.05"), (0.02, "T = 0.02")]):
@@ -174,7 +174,7 @@ for j, (T, lbl) in enumerate([(1, "T = 1"), (0.05, "chosen T = 0.05"), (0.02, "T
     for i, v in enumerate(p): ax.text(i, v + 0.03, f"{v:.2f}", ha="center", fontsize=7)
     ax.set_ylim(0, 1.1); ax.set_yticks([]); ax.set_xticks(range(3)); ax.set_xticklabels(TN[:3], fontsize=8)
     ax.set_title(lbl, fontsize=8.5, fontweight="bold" if j == 1 else "normal"); [ax.spines[x].set_visible(False) for x in ["top", "right", "left"]]
-txt(fig, P[2], 0.07, 0.10, "p$^0$: one probability per cell and type (n × K)\nbest type is the same for any T", fontsize=8, color=MUTED)
+txt(fig, P[2], 0.07, 0.10, "q$^0$: one probability per cell and type (n × K)\nbest type is the same for any T", fontsize=8, color=MUTED)
 save(fig, "step3.png")
 
 # ---------------- Step 4 ----------------
@@ -230,7 +230,7 @@ def stacks(ax, M, title):
         ax.bar(range(len(M)), M[:, k], bottom=bottom, color=TC[k], width=0.8); bottom += M[:, k]
     ax.set_ylim(0, 1); ax.set_xticks([]); ax.set_yticks([]); ax.set_title(title, fontsize=9)
     [s.set_visible(False) for s in ax.spines.values()]
-ax = sub(fig, P[0], (0.10, 0.25, 0.80, 0.50)); stacks(ax, p0, "p$^0$ for 8 cells of one ICONS cluster (cells 1-8)")
+ax = sub(fig, P[0], (0.10, 0.25, 0.80, 0.50)); stacks(ax, p0, "q$^0$ for 8 cells of one ICONS cluster (cells 1-8)")
 ax.set_xticks(range(8)); ax.set_xticklabels([str(i+1) for i in range(8)], fontsize=7.5); ax.tick_params(length=0)
 txt(fig, P[0], 0.10, 0.10, "+ fixed cluster id per cell (Step 3)", fontsize=8, color=MUTED)
 for k in range(3): txt(fig, P[0], 0.10 + k * 0.14, 0.18, "■ " + TN[k], fontsize=8, color=TC[k])
@@ -247,7 +247,7 @@ bx.text(0.81, 0.38, "E-step\n" + r"$q_{ik} \propto e^{s_{ik}/T}\,\pi_{C,k}$", ha
 bx.add_patch(FancyArrowPatch((0.19, 0.50), (0.40, 0.72), connectionstyle="arc3,rad=-0.3", arrowstyle="-|>", mutation_scale=12, color="#e08a2e"))
 bx.add_patch(FancyArrowPatch((0.60, 0.72), (0.81, 0.50), connectionstyle="arc3,rad=-0.3", arrowstyle="-|>", mutation_scale=12, color="#e08a2e"))
 bx.add_patch(FancyArrowPatch((0.64, 0.30), (0.36, 0.30), connectionstyle="arc3,rad=-0.3", arrowstyle="-|>", mutation_scale=12, color="#e08a2e"))
-bx.text(0.5, 0.06, "cell 1: A×π$_A$ < B×π$_B$  →  moves to B; cell 4 (A 0.96) stays A\nrepeat until change < 1e-8; singletons stay at p$^0$", ha="center", fontsize=7.8, color=MUTED)
+bx.text(0.5, 0.06, "cell 1: A×π$_A$ < B×π$_B$  →  moves to B; cell 4 (A 0.96) stays A\nrepeat until change < 1e-8; singletons stay at q$^0$", ha="center", fontsize=7.8, color=MUTED)
 # output
 q = p0.copy()
 for _ in range(30):
