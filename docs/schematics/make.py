@@ -14,7 +14,7 @@ INK = "#2b2b2b"; MUTED = "#6b6b6b"
 
 def frame(title, n=3):
     fig = plt.figure(figsize=(13, 4.4))
-    fig.suptitle(title, x=0.012, ha="left", fontsize=12.5, fontweight="bold", color=INK, y=0.985)
+    if title: fig.suptitle(title, x=0.012, ha="left", fontsize=12.5, fontweight="bold", color=INK, y=0.985)
     xs = [0.01, 0.355, 0.70]; w = 0.29
     axes = []
     for x, lab in zip(xs, ["Input", "What it does", "Output"]):
@@ -54,7 +54,7 @@ def save(fig, name):
     fig.savefig(os.path.join(OUT, name), dpi=170, facecolor="white"); plt.close(fig)
 
 # ---------------- Step 1 ----------------
-fig, P = frame("Step 1  Fold rebuild + SCTransform")
+fig, P = frame(None)
 donors = np.repeat([0, 1, 2, 3, 4], [9, 8, 10, 7, 8])
 ax = sub(fig, P[0], (0.08, 0.20, 0.84, 0.50))
 counts = rng.poisson(0.6, (22, len(donors))) * (rng.random((22, len(donors))) < 0.45)
