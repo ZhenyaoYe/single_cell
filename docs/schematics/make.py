@@ -64,7 +64,7 @@ dc = ["#bdbdbd", "#9e9e9e", "#d64545", "#bdbdbd", "#9e9e9e"]
 ax2.imshow(donors[None, :], cmap=ListedColormap(dc), aspect="auto"); ax2.set_axis_off()
 txt(fig, P[0], 0.08, 0.79, "donor", fontsize=8, color=MUTED)
 txt(fig, P[0], 0.44, 0.79, "held-out donor", fontsize=8, color="#d64545", fontweight="bold")
-txt(fig, P[0], 0.08, 0.07, "raw counts (BICCN_mat.mtx) + metadata\n+ saved fold: query cell names, 3000 HVGs", fontsize=8, color=MUTED)
+txt(fig, P[0], 0.08, 0.07, "raw counts + metadata (donor, cell type)\n+ saved fold: query cells, 3000 HVGs", fontsize=8, color=MUTED)
 # does
 ax = sub(fig, P[1], (0.06, 0.45, 0.50, 0.33)); mat(ax, counts[:, donors != 2], cmap="Greys", vmin=0, vmax=3, title="reference = other donors")
 ax = sub(fig, P[1], (0.70, 0.45, 0.22, 0.33)); mat(ax, counts[:, donors == 2], cmap="Greys", vmin=0, vmax=3, title="query")
@@ -78,8 +78,8 @@ x0, w = P[1]
 fig.patches.append(FancyArrowPatch((x0 + 0.31 * w, 0.03 + 0.44 * 0.86), (x0 + 0.31 * w, 0.03 + 0.31 * 0.86), transform=fig.transFigure, arrowstyle="-|>", mutation_scale=10, color="#e08a2e"))
 fig.patches.append(FancyArrowPatch((x0 + 0.84 * w, 0.03 + 0.31 * 0.86), (x0 + 0.84 * w, 0.03 + 0.44 * 0.86), transform=fig.transFigure, arrowstyle="-|>", mutation_scale=10, color="#e08a2e"))
 # output
-ax = sub(fig, P[2], (0.08, 0.22, 0.56, 0.55)); mat(ax, rng.normal(0, 1, (22, 34)), vmin=-2.5, vmax=2.5, title="ref_sct", xl="reference cells", yl="3000 HVGs")
-ax = sub(fig, P[2], (0.72, 0.22, 0.20, 0.55)); mat(ax, rng.normal(0, 1, (22, 10)), vmin=-2.5, vmax=2.5, title="qry_sct", xl="query cells")
+ax = sub(fig, P[2], (0.08, 0.22, 0.56, 0.55)); mat(ax, rng.normal(0, 1, (22, 34)), vmin=-2.5, vmax=2.5, title="reference SCT", xl="reference cells", yl="3000 HVGs")
+ax = sub(fig, P[2], (0.72, 0.22, 0.20, 0.55)); mat(ax, rng.normal(0, 1, (22, 10)), vmin=-2.5, vmax=2.5, title="query SCT", xl="query cells")
 txt(fig, P[2], 0.08, 0.07, "same HVGs, same order, same SCT scale", fontsize=8, color=MUTED)
 save(fig, "step1.png")
 
@@ -90,9 +90,9 @@ prof = rng.normal(0, 1, (4, 22))
 R = (prof[ref_lab] + rng.normal(0, 0.8, (len(ref_lab), 22))).T
 qlab = np.array([1, 0, 1, 2, 1, 0, 3, 1, 2, 0])
 Q = (prof[qlab] + rng.normal(0, 0.8, (10, 22))).T
-ax = sub(fig, P[0], (0.08, 0.20, 0.56, 0.50)); mat(ax, R, vmin=-2.5, vmax=2.5, title="ref_sct", xl="reference cells", yl="HVGs")
+ax = sub(fig, P[0], (0.08, 0.20, 0.56, 0.50)); mat(ax, R, vmin=-2.5, vmax=2.5, xl="reference SCT: reference cells", yl="HVGs")
 a2 = sub(fig, P[0], (0.08, 0.705, 0.56, 0.045)); a2.imshow(ref_lab[None], cmap=ListedColormap(TC), aspect="auto"); a2.set_axis_off()
-ax = sub(fig, P[0], (0.72, 0.20, 0.20, 0.50)); mat(ax, Q, vmin=-2.5, vmax=2.5, title="qry_sct", xl="query")
+ax = sub(fig, P[0], (0.72, 0.20, 0.20, 0.50)); mat(ax, Q, vmin=-2.5, vmax=2.5, xl="query SCT")
 txt(fig, P[0], 0.08, 0.80, "labels:", fontsize=8, color=MUTED)
 for i in range(4):
     txt(fig, P[0], 0.24 + i * 0.1, 0.80, TN[i], fontsize=8.5, color=TC[i], fontweight="bold")
@@ -110,7 +110,7 @@ txt(fig, P[1], 0.08, 0.15, r"$s_{ik} = z_i^\top \bar z_k/(G-1)$" + "  = mean Pea
 txt(fig, P[1], 0.08, 0.06, "also: Pearson r between every pair of query cells", fontsize=8, color=MUTED)
 # output
 C, _ = blocky(10, [4, 3, 3]); perm = rng.permutation(10)
-ax = sub(fig, P[2], (0.07, 0.25, 0.42, 0.52)); mat(ax, C[np.ix_(perm, perm)], cmap="viridis", vmin=0, vmax=1, title="query_corr  (n × n)", xl="query cells", yl="query cells")
+ax = sub(fig, P[2], (0.07, 0.25, 0.42, 0.52)); mat(ax, C[np.ix_(perm, perm)], cmap="viridis", vmin=0, vmax=1, title="query correlation (n × n)", xl="query cells", yl="query cells")
 S = 0.3 + 0.3 * (qlab[:, None] == np.arange(4)[None]) + rng.normal(0, 0.03, (10, 4))
 ax = sub(fig, P[2], (0.62, 0.25, 0.30, 0.52)); mat(ax, S, cmap="viridis", vmin=0.2, vmax=0.7, title="s$_{ik}$  (n × K)", xl="cell types")
 for k in range(4): txt(fig, P[2], 0.62 + (k + 0.5) * 0.075 - 0.012, 0.19, TN[k], fontsize=8, color=TC[k], fontweight="bold")
@@ -157,7 +157,7 @@ n = 30; sizes = [11, 8, 7, 4]
 C, lab = blocky(n, sizes, strength=0.6, noise=0.1)
 lab = lab.copy(); lab[26:] = -1
 perm = rng.permutation(n)
-ax = sub(fig, P[0], (0.14, 0.18, 0.72, 0.60)); mat(ax, C[np.ix_(perm, perm)], cmap="jet", vmin=0, vmax=1, title="query_corr (original cell order)", xl="query cells", yl="query cells")
+ax = sub(fig, P[0], (0.14, 0.18, 0.72, 0.60)); mat(ax, C[np.ix_(perm, perm)], cmap="jet", vmin=0, vmax=1, title="query correlation (original order)", xl="query cells", yl="query cells")
 txt(fig, P[0], 0.14, 0.06, "structure is hidden in the original order", fontsize=8, color=MUTED)
 # does: graph
 ax = sub(fig, P[1], (0.05, 0.13, 0.90, 0.63)); ax.set_axis_off(); ax.set_xlim(0, 1); ax.set_ylim(0, 1)
@@ -266,7 +266,7 @@ tb.auto_set_font_size(False); tb.set_fontsize(8); tb.scale(1, 1.6)
 for (r, c), cell in tb.get_celld().items():
     cell.set_edgecolor("#bbb")
     if r == 0: cell.set_facecolor("#dfe9e1"); cell.set_text_props(fontweight="bold")
-txt(fig, P[2], 0.06, 0.82, "<donor>_method_comparison.csv", fontsize=8.5, fontweight="bold")
+txt(fig, P[2], 0.06, 0.82, "method comparison", fontsize=8.5, fontweight="bold")
 txt(fig, P[2], 0.06, 0.10, "+ per-cell predictions, per-type P/R/F1,\nchanges by cluster size, true vs EM composition", fontsize=8, color=MUTED)
 save(fig, "step6.png")
 print("ok")
